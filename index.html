@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monster Slayer</title>
+    <script src="https://npmcdn.com/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="css/foundation.min.css">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div id="app">
+    <section class="row">
+        <div class="small-6 columns">
+            <h1 class="text-center">YOU <span v-if="gameIsRunning" class="hit-damage">- {{ monsterDamage }} Damage</span></h1>
+            <div class="healthbar">
+                <div
+                    class="healthbar text-center"
+                    style="background-color: green; margin: 0; color: white;"
+                    :style="{width: playerHealth + '%'}">
+                  {{ playerHealth }}
+                </div>
+            </div>
+        </div>
+        <div class="small-6 columns">
+            <h1 class="text-center">MONSTER <span v-if="gameIsRunning" class="hit-damage">- {{ playerDamage }} Damage</span></h1>
+            <div class="healthbar">
+                <div
+                    class="healthbar text-center"
+                    style="background-color: green; margin: 0; color: white;"
+                    :style="{width: monsterHealth + '%'}">
+                  {{ monsterHealth }}
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="row controls" v-if="!gameIsRunning">
+        <div class="small-12 columns">
+            <button id="start-game" @click="startGame">START NEW GAME</button>
+        </div>
+    </section>
+    <section class="row controls" v-else>
+        <div class="small-12 columns">
+            <button id="attack" @click="attack">ATTACK</button>
+            <button id="special-attack" :disabled="remainingSpecialAttack <= 0" @click="specialAttack">SPECIAL ATTACK</button>
+            <button id="heal" :disabled="remainingHeal <= 0" @click="heal">HEAL</button>
+            <button id="give-up" @click="giveUp">GIVE UP</button>
+        </div>
+        <div class="small-12 columns">
+          <ul style="list-style: none">
+            <li>Remaining Special Attack : {{ remainingSpecialAttack }}</li>
+            <li>Remaining Heal :  {{ remainingHeal }}</li>
+          </ul>
+        </div>
+    </section>
+    <section class="row log" v-if="turns.length">
+        <div class="small-12 columns">
+            <ul>
+                <li v-for="turn in turns" :class="[{'player-turn': turn.isPlayer}, {'monster-turn': !turn.isPlayer}]">
+                  {{ turn.text }}
+                </li>
+            </ul>
+        </div>
+    </section>
+</div>
+</body>
+<script src="app.js"></script>
+</html>
